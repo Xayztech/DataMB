@@ -1,20 +1,15 @@
-// Mengimpor library yang dibutuhkan
 const { Octokit } = require("@octokit/rest");
 const { Buffer } = require("buffer");
 
-// Inisialisasi Octokit dengan token dari Environment Variable
 const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
 });
 
-// Detail repository kamu
-const owner = 'Xayztech'; // <-- Ganti dengan username GitHub kamu
-const repo = 'DataMB';      // <-- Ganti dengan nama repository kamu
-const path = 'DataMB.json';
+const owner = 'Xayztech';
+const repo = 'DataMB';
+const path = 'MainMB.json';
 
-// Fungsi utama yang akan dijalankan Vercel
 module.exports = async (req, res) => {
-  // Hanya izinkan metode POST
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
@@ -22,32 +17,26 @@ module.exports = async (req, res) => {
   try {
     const { number } = req.body;
 
-    // 1. Ambil konten file yang ada saat ini dari GitHub
     const { data: fileData } = await octokit.repos.getContent({
       owner,
       repo,
       path,
     });
 
-    // 2. Decode konten file (dari Base64 ke string) dan parse menjadi JSON
     const content = Buffer.from(fileData.content, 'base64').toString('utf8');
     const database = JSON.parse(content);
 
-    // 3. Tambahkan nomor baru ke dalam array
-    const newEntry = { number: number, status: "active" };
-    database.push(newEntry);
+    database.push(number);
 
-    // 4. Ubah kembali array menjadi string JSON dan encode ke Base64
     const updatedContent = Buffer.from(JSON.stringify(database, null, 2)).toString('base64');
 
-    // 5. Update file di GitHub
     await octokit.repos.createOrUpdateFileContents({
       owner,
       repo,
       path,
-      message: `Feat: Add number ${number}`, // Pesan commit
+      message: `Feat: Add number ${number}`,
       content: updatedContent,
-      sha: fileData.sha, // SHA dari file lama, wajib untuk update
+      sha: fileData.sha,
     });
 
     res.status(200).json({ message: 'Nomor berhasil ditambahkan!' });
