@@ -202,10 +202,12 @@
     </div>
 
     <script>
+        // === KONFIGURASI ===
         const GITHUB_USERNAME = 'Xayztech';
         const GITHUB_REPO = 'DataMB';
         const DATABASE_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/MainMB.json`;
 
+        // === ELEMEN DOM ===
         const loginOverlay = document.getElementById('login-overlay');
         const loginForm = document.getElementById('login-form');
         const usernameInput = document.getElementById('username');
@@ -219,6 +221,7 @@
         const searchInput = document.getElementById('search-input');
         let allData = [];
 
+        // === LOGIKA LOGIN ===
         const handleLogin = (event) => {
             event.preventDefault();
             const username = usernameInput.value;
@@ -237,20 +240,25 @@
             }
         };
 
+        // === FUNGSI-FUNGSI UTAMA ===
+
+        // ## FUNGSI RENDERDATA (KEMBALI SEPERTI SEMULA) ##
         const renderData = (data) => {
             dataList.innerHTML = '';
             if (data.length === 0) {
                 dataList.innerHTML = '<li>Tidak ada data.</li>';
                 return;
             }
+            // Kembali membaca item.number dan item.status
             data.forEach((item, index) => {
                 const li = document.createElement('li');
                 li.style.animationDelay = `${index * 0.05}s`;
-                li.innerHTML = `<span>${item}</span>`;
+                li.innerHTML = `<span>${item.number}</span> <span class="status">${item.status}</span>`;
                 dataList.appendChild(li);
             });
         };
 
+        // Fungsi fetchData
         const fetchData = async () => {
             dataList.innerHTML = '<li>Memuat data...</li>';
             try {
@@ -264,6 +272,7 @@
             }
         };
 
+        // Fungsi handleAddNumber
         const handleAddNumber = async (event) => {
             event.preventDefault();
             const number = numberInput.value.trim();
@@ -282,6 +291,33 @@
                 const result = await response.json();
                 if (!response.ok) throw new Error(result.message || 'Gagal menambahkan nomor');
                 messageDiv.textContent = 'Berhasil menambah nomor ✓';
+                messageDiv.className = 'success';
+                addForm.reset();
+                await fetchData();
+            } catch (error) {
+                messageDiv.textContent = `Error: ${error.message}`;
+                messageDiv.className = 'error';
+            } finally {
+                event.target.querySelector('button').textContent = originalButtonText;
+                event.target.querySelector('button').disabled = false;
+            }
+        };
+        
+        // ## FUNGSI SEARCH (KEMBALI SEPERTI SEMULA) ##
+        const handleSearch = (event) => {
+            const query = event.target.value.toLowerCase();
+            // Kembali mencari berdasarkan item.number
+            const filteredData = allData.filter(item => item.number.toLowerCase().includes(query));
+            renderData(filteredData);
+        };
+
+        // === EVENT LISTENERS ===
+        loginForm.addEventListener('submit', handleLogin);
+        addForm.addEventListener('submit', handleAddNumber);
+        searchInput.addEventListener('input', handleSearch);
+    </script>
+</body>
+                </html> 'Berhasil menambah nomor ✓';
                 messageDiv.className = 'success';
                 addForm.reset();
                 await fetchData();
