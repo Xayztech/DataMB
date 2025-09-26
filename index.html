@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>X A Y Z ☇ V O G X Database</title>
     <style>
-        /* === Variabel Warna & Tema === */
         :root {
             --bg-color: #ffffff;
             --text-color: #2c3e50;
             --card-bg-color: #ffffff;
             --border-color: #dfe4ea;
-            --primary-color: #00fff2; /* Biru Kehijauan Neon */
+            --primary-color: #00fff2;
             --primary-color-darker: #00c4b8;
             --shadow-color: rgba(0, 0, 0, 0.1);
             --error-color: #e74c3c;
@@ -27,9 +26,7 @@
             }
         }
         
-        /* === Animasi & Transisi Halus (Efek 144FPS) === */
         * {
-            /* Transisi diterapkan ke semua properti untuk efek yang sangat halus */
             transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.3s ease;
         }
 
@@ -48,7 +45,6 @@
             animation: shake 0.5s ease-in-out;
         }
 
-        /* === Gaya Dasar === */
         body {
             font-family: 'Segoe UI', 'Roboto', sans-serif;
             background-color: var(--bg-color);
@@ -61,7 +57,6 @@
             min-height: 100vh;
         }
 
-        /* === Layar Login === */
         #login-overlay {
             position: fixed;
             top: 0;
@@ -93,7 +88,6 @@
             animation: fadeIn 0.6s ease-out;
         }
 
-        /* === Konten Utama === */
         .container {
             max-width: 600px;
             width: 100%;
@@ -101,7 +95,6 @@
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 8px 30px var(--shadow-color);
-            /* Awalnya disembunyikan */
             display: none; 
         }
 
@@ -117,7 +110,6 @@
             margin-bottom: 25px;
         }
         
-        /* === Form & Input === */
         form { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
         input[type="text"], input[type="password"], input[type="search"] {
             width: 100%;
@@ -126,7 +118,7 @@
             border: 2px solid var(--border-color);
             color: var(--text-color);
             border-radius: 8px;
-            box-sizing: border-box; /* Penting untuk padding */
+            box-sizing: border-box; 
         }
         
         input:focus {
@@ -162,7 +154,6 @@
         .success { color: #2ecc71; }
         .error { color: var(--error-color); }
 
-        /* === Daftar Data === */
         #data-list { list-style-type: none; padding: 0; }
         #data-list li {
             background: var(--bg-color);
@@ -177,11 +168,9 @@
             animation: fadeIn 0.5s ease forwards;
         }
         
-        /* Memberi delay animasi untuk setiap item list */
         #data-list li:nth-child(1) { animation-delay: 0.1s; }
         #data-list li:nth-child(2) { animation-delay: 0.15s; }
         #data-list li:nth-child(3) { animation-delay: 0.2s; }
-        /* dan seterusnya */
 
         #data-list .status { font-style: italic; color: #95a5a6; }
     </style>
@@ -213,54 +202,41 @@
     </div>
 
     <script>
-        // === KONFIGURASI ===
-        const GITHUB_USERNAME = 'Xayztech'; // <-- Ganti dengan username GitHub kamu
-        const GITHUB_REPO = 'DataMB';      // <-- Ganti dengan nama repository kamu
-        const DATABASE_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/DataMB.json`;
+        const GITHUB_USERNAME = 'Xayztech';
+        const GITHUB_REPO = 'DataMB';
+        const DATABASE_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/MainMB.json`;
 
-        // === ELEMEN DOM ===
         const loginOverlay = document.getElementById('login-overlay');
         const loginForm = document.getElementById('login-form');
         const usernameInput = document.getElementById('username');
         const passwordInput = document.getElementById('password');
         const loginError = document.getElementById('login-error');
-
         const mainContainer = document.querySelector('.container');
         const dataList = document.getElementById('data-list');
         const addForm = document.getElementById('add-form');
         const numberInput = document.getElementById('number-input');
         const messageDiv = document.getElementById('message');
         const searchInput = document.getElementById('search-input');
-        
         let allData = [];
 
-        // === LOGIKA LOGIN ===
         const handleLogin = (event) => {
             event.preventDefault();
             const username = usernameInput.value;
             const password = passwordInput.value;
-
-            // Periksa username dan password
             if (username === "XYCoolcraft" && password === "XayzTech##321") {
                 loginError.textContent = '';
-                // Sembunyikan layar login dengan animasi
                 loginOverlay.classList.add('hidden');
-                // Tampilkan konten utama dengan animasi
                 mainContainer.classList.add('visible');
-                // Mulai ambil data dari database
                 fetchData();
             } else {
                 loginError.textContent = 'Username atau Password salah!';
-                // Tambahkan animasi getar pada form
                 loginForm.classList.add('shake-animation');
-                // Hapus kelas animasi setelah selesai agar bisa di-trigger lagi
                 setTimeout(() => {
                     loginForm.classList.remove('shake-animation');
                 }, 500);
             }
         };
 
-        // === FUNGSI-FUNGSI UTAMA ===
         const renderData = (data) => {
             dataList.innerHTML = '';
             if (data.length === 0) {
@@ -269,9 +245,8 @@
             }
             data.forEach((item, index) => {
                 const li = document.createElement('li');
-                // Menambahkan delay animasi untuk setiap item baru
                 li.style.animationDelay = `${index * 0.05}s`;
-                li.innerHTML = `<span>${item.number}</span> <span class="status">${item.status}</span>`;
+                li.innerHTML = `<span>${item}</span>`;
                 dataList.appendChild(li);
             });
         };
@@ -293,13 +268,11 @@
             event.preventDefault();
             const number = numberInput.value.trim();
             if (!number) return;
-            
             messageDiv.textContent = 'Menambahkan...';
             messageDiv.className = '';
             const originalButtonText = event.target.querySelector('button').textContent;
             event.target.querySelector('button').textContent = 'Loading...';
             event.target.querySelector('button').disabled = true;
-
             try {
                 const response = await fetch('/api/add-number', {
                     method: 'POST',
@@ -308,7 +281,6 @@
                 });
                 const result = await response.json();
                 if (!response.ok) throw new Error(result.message || 'Gagal menambahkan nomor');
-
                 messageDiv.textContent = 'Berhasil menambah nomor ✓';
                 messageDiv.className = 'success';
                 addForm.reset();
@@ -324,14 +296,13 @@
         
         const handleSearch = (event) => {
             const query = event.target.value.toLowerCase();
-            const filteredData = allData.filter(item => item.number.includes(query));
+            const filteredData = allData.filter(item => item.toLowerCase().includes(query));
             renderData(filteredData);
         };
 
-        // === EVENT LISTENERS ===
         loginForm.addEventListener('submit', handleLogin);
         addForm.addEventListener('submit', handleAddNumber);
         searchInput.addEventListener('input', handleSearch);
     </script>
 </body>
-  </html>
+</html>
