@@ -9,7 +9,7 @@ const octokit = new Octokit({
 
 // Detail repository kamu
 const owner = 'Xayztech'; // <-- Ganti dengan username GitHub kamu
-const repo = 'Doxing-Template-tracker';      // <-- Ganti dengan nama repository kamu
+const repo = 'DataMB';      // <-- Ganti dengan nama repository kamu
 const path = 'DataMB.json';
 
 // Fungsi utama yang akan dijalankan Vercel
