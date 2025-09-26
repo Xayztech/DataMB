@@ -8,9 +8,9 @@ const octokit = new Octokit({
 });
 
 // Detail repository kamu
-const owner = 'NAMA_USER_GITHUB_ANDA'; // <-- Ganti dengan username GitHub kamu
-const repo = 'database-project';      // <-- Ganti dengan nama repository kamu
-const path = 'database.json';
+const owner = 'Xayztech'; // <-- Ganti dengan username GitHub kamu
+const repo = 'Doxing-Template-tracker';      // <-- Ganti dengan nama repository kamu
+const path = 'DataMB.json';
 
 // Fungsi utama yang akan dijalankan Vercel
 module.exports = async (req, res) => {
