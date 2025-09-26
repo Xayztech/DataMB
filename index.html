@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X A Y Z ☇ V O G X Database</title>
+    <title>X A Y Z ☇ V O G X Editor</title>
     <style>
         /* === Variabel Warna & Tema === */
         :root {
@@ -334,61 +334,4 @@
         searchInput.addEventListener('input', handleSearch);
     </script>
 </body>
-    </html>       method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ number: number }),
-                });
-                const result = await response.json();
-                if (!response.ok) throw new Error(result.message || 'Gagal menambahkan nomor');
-                messageDiv.textContent = 'Berhasil menambah nomor ✓';
-                messageDiv.className = 'success';
-                addForm.reset();
-                await fetchData();
-            } catch (error) {
-                messageDiv.textContent = `Error: ${error.message}`;
-                messageDiv.className = 'error';
-            } finally {
-                event.target.querySelector('button').textContent = originalButtonText;
-                event.target.querySelector('button').disabled = false;
-            }
-        };
-        
-        // ## FUNGSI SEARCH (KEMBALI SEPERTI SEMULA) ##
-        const handleSearch = (event) => {
-            const query = event.target.value.toLowerCase();
-            // Kembali mencari berdasarkan item.number
-            const filteredData = allData.filter(item => item.number.toLowerCase().includes(query));
-            renderData(filteredData);
-        };
-
-        // === EVENT LISTENERS ===
-        loginForm.addEventListener('submit', handleLogin);
-        addForm.addEventListener('submit', handleAddNumber);
-        searchInput.addEventListener('input', handleSearch);
-    </script>
-</body>
-                </html> 'Berhasil menambah nomor ✓';
-                messageDiv.className = 'success';
-                addForm.reset();
-                await fetchData();
-            } catch (error) {
-                messageDiv.textContent = `Error: ${error.message}`;
-                messageDiv.className = 'error';
-            } finally {
-                event.target.querySelector('button').textContent = originalButtonText;
-                event.target.querySelector('button').disabled = false;
-            }
-        };
-        
-        const handleSearch = (event) => {
-            const query = event.target.value.toLowerCase();
-            const filteredData = allData.filter(item => item.toLowerCase().includes(query));
-            renderData(filteredData);
-        };
-
-        loginForm.addEventListener('submit', handleLogin);
-        addForm.addEventListener('submit', handleAddNumber);
-        searchInput.addEventListener('input', handleSearch);
-    </script>
-</body>
-</html>
+    </html>
