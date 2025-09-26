@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X A Y Z ☇ V O G X Database</title>
+    <style>
+        /* === Variabel Warna & Tema === */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #2c3e50;
+            --card-bg-color: #ffffff;
+            --border-color: #dfe4ea;
+            --primary-color: #00fff2; /* Biru Kehijauan Neon */
+            --primary-color-darker: #00c4b8;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --error-color: #e74c3c;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #1a1a1a;
+                --text-color: #ecf0f1;
+                --card-bg-color: #2c2c2c;
+                --border-color: #444;
+                --shadow-color: rgba(0, 255, 242, 0.1);
+            }
+        }
+        
+        /* === Animasi & Transisi Halus (Efek 144FPS) === */
+        * {
+            /* Transisi diterapkan ke semua properti untuk efek yang sangat halus */
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .shake-animation {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* === Gaya Dasar === */
+        body {
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* === Layar Login === */
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        
+        #login-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        #login-form {
+            width: 100%;
+            max-width: 350px;
+            padding: 30px;
+            background-color: var(--card-bg-color);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px var(--shadow-color);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* === Konten Utama === */
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: var(--card-bg-color);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px var(--shadow-color);
+            /* Awalnya disembunyikan */
+            display: none; 
+        }
+
+        .container.visible {
+            display: block;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: var(--primary-color);
+            text-shadow: 0 0 8px var(--primary-color);
+            margin-bottom: 25px;
+        }
+        
+        /* === Form & Input === */
+        form { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
+        input[type="text"], input[type="password"], input[type="search"] {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: var(--bg-color);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 8px;
+            box-sizing: border-box; /* Penting untuk padding */
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+
+        button {
+            padding: 12px 15px;
+            background-color: var(--primary-color);
+            color: #000;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transform: scale(1);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        button:hover {
+            background-color: var(--primary-color-darker);
+            transform: scale(1.05);
+        }
+
+        #message, #login-error {
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+            min-height: 20px;
+        }
+        
+        .success { color: #2ecc71; }
+        .error { color: var(--error-color); }
+
+        /* === Daftar Data === */
+        #data-list { list-style-type: none; padding: 0; }
+        #data-list li {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        /* Memberi delay animasi untuk setiap item list */
+        #data-list li:nth-child(1) { animation-delay: 0.1s; }
+        #data-list li:nth-child(2) { animation-delay: 0.15s; }
+        #data-list li:nth-child(3) { animation-delay: 0.2s; }
+        /* dan seterusnya */
+
+        #data-list .status { font-style: italic; color: #95a5a6; }
+    </style>
+</head>
+<body>
+
+    <div id="login-overlay">
+        <div id="login-container">
+            <form id="login-form">
+                <h1>Login To Continue</h1>
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+                <div id="login-error" class="error"></div>
+            </form>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>X A Y Z ☇ V O G X Database</h1>
+        <form id="add-form">
+            <input type="text" id="number-input" placeholder="Masukkan nomor" required>
+            <button type="submit">Tambah Nomor</button>
+        </form>
+        <div id="message"></div>
+        <h2>Daftar Nomor</h2>
+        <input type="search" id="search-input" placeholder="Cari nomor...">
+        <ul id="data-list"></ul>
+    </div>
+
+    <script>
+        // === KONFIGURASI ===
+        const GITHUB_USERNAME = 'Xayztech'; // <-- Ganti dengan username GitHub kamu
+        const GITHUB_REPO = 'Doxing-Template-tracker';      // <-- Ganti dengan nama repository kamu
+        const DATABASE_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/DataMB.json`;
+
+        // === ELEMEN DOM ===
+        const loginOverlay = document.getElementById('login-overlay');
+        const loginForm = document.getElementById('login-form');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginError = document.getElementById('login-error');
+
+        const mainContainer = document.querySelector('.container');
+        const dataList = document.getElementById('data-list');
+        const addForm = document.getElementById('add-form');
+        const numberInput = document.getElementById('number-input');
+        const messageDiv = document.getElementById('message');
+        const searchInput = document.getElementById('search-input');
+        
+        let allData = [];
+
+        // === LOGIKA LOGIN ===
+        const handleLogin = (event) => {
+            event.preventDefault();
+            const username = usernameInput.value;
+            const password = passwordInput.value;
+
+            // Periksa username dan password
+            if (username === "XYCoolcraft" && password === "XayzTech##321") {
+                loginError.textContent = '';
+                // Sembunyikan layar login dengan animasi
+                loginOverlay.classList.add('hidden');
+                // Tampilkan konten utama dengan animasi
+                mainContainer.classList.add('visible');
+                // Mulai ambil data dari database
+                fetchData();
+            } else {
+                loginError.textContent = 'Username atau Password salah!';
+                // Tambahkan animasi getar pada form
+                loginForm.classList.add('shake-animation');
+                // Hapus kelas animasi setelah selesai agar bisa di-trigger lagi
+                setTimeout(() => {
+                    loginForm.classList.remove('shake-animation');
+                }, 500);
+            }
+        };
+
+        // === FUNGSI-FUNGSI UTAMA ===
+        const renderData = (data) => {
+            dataList.innerHTML = '';
+            if (data.length === 0) {
+                dataList.innerHTML = '<li>Tidak ada data.</li>';
+                return;
+            }
+            data.forEach((item, index) => {
+                const li = document.createElement('li');
+                // Menambahkan delay animasi untuk setiap item baru
+                li.style.animationDelay = `${index * 0.05}s`;
+                li.innerHTML = `<span>${item.number}</span> <span class="status">${item.status}</span>`;
+                dataList.appendChild(li);
+            });
+        };
+
+        const fetchData = async () => {
+            dataList.innerHTML = '<li>Memuat data...</li>';
+            try {
+                const response = await fetch(`${DATABASE_URL}?t=${new Date().getTime()}`);
+                if (!response.ok) throw new Error('Gagal mengambil data');
+                allData = await response.json();
+                renderData(allData);
+            } catch (error) {
+                dataList.innerHTML = '<li>Gagal memuat data.</li>';
+                console.error(error);
+            }
+        };
+
+        const handleAddNumber = async (event) => {
+            event.preventDefault();
+            const number = numberInput.value.trim();
+            if (!number) return;
+            
+            messageDiv.textContent = 'Menambahkan...';
+            messageDiv.className = '';
+            const originalButtonText = event.target.querySelector('button').textContent;
+            event.target.querySelector('button').textContent = 'Loading...';
+            event.target.querySelector('button').disabled = true;
+
+            try {
+                const response = await fetch('/api/add-number', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ number: number }),
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.message || 'Gagal menambahkan nomor');
+
+                messageDiv.textContent = 'Berhasil menambah nomor ✓';
+                messageDiv.className = 'success';
+                addForm.reset();
+                await fetchData();
+            } catch (error) {
+                messageDiv.textContent = `Error: ${error.message}`;
+                messageDiv.className = 'error';
+            } finally {
+                event.target.querySelector('button').textContent = originalButtonText;
+                event.target.querySelector('button').disabled = false;
+            }
+        };
+        
+        const handleSearch = (event) => {
+            const query = event.target.value.toLowerCase();
+            const filteredData = allData.filter(item => item.number.includes(query));
+            renderData(filteredData);
+        };
+
+        // === EVENT LISTENERS ===
+        loginForm.addEventListener('submit', handleLogin);
+        addForm.addEventListener('submit', handleAddNumber);
+        searchInput.addEventListener('input', handleSearch);
+    </script>
+</body>
+  </html>
