@@ -10,10 +10,11 @@ const octokit = new Octokit({
 // Detail repository kamu
 const owner = 'Xayztech'; // <-- Ganti dengan username GitHub kamu
 const repo = 'DataMB';      // <-- Ganti dengan nama repository kamu
-const path = 'MainMB.json';         // <-- Sesuaikan dengan nama file JSON kamu
+const path = 'MainMB.json';
 
 // Fungsi utama yang akan dijalankan Vercel
 module.exports = async (req, res) => {
+  // Hanya izinkan metode POST
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
@@ -28,11 +29,11 @@ module.exports = async (req, res) => {
       path,
     });
 
-    // 2. Decode konten file dan parse menjadi JSON
+    // 2. Decode konten file (dari Base64 ke string) dan parse menjadi JSON
     const content = Buffer.from(fileData.content, 'base64').toString('utf8');
     const database = JSON.parse(content);
 
-    // 3. Buat entri baru dalam format objek dan tambahkan ke array
+    // 3. Tambahkan nomor baru ke dalam array
     const newEntry = { number: number, status: "active" };
     database.push(newEntry);
 
@@ -44,9 +45,9 @@ module.exports = async (req, res) => {
       owner,
       repo,
       path,
-      message: `Feat: Add number ${number}`,
+      message: `Feat: Add number ${number}`, // Pesan commit
       content: updatedContent,
-      sha: fileData.sha,
+      sha: fileData.sha, // SHA dari file lama, wajib untuk update
     });
 
     res.status(200).json({ message: 'Nomor berhasil ditambahkan!' });
