@@ -1,0 +1,8 @@
+{
+  "name": "DataMB",
+  "version": "1.0.0",
+  "description": "A simple database editor using GitHub JSON and Vercel.",
+  "dependencies": {
+    "@octokit/rest": "^20.1.0"
+  }
+}
